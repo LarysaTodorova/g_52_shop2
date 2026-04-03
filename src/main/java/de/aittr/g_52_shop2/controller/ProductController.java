@@ -92,7 +92,7 @@ public class ProductController {
 
     //    Восстановить удалённый продукт в базе данных по его идентификатору.
     // PUT -> http://12.34.56.78:8080/products/restore/5
-    @PutMapping("/{id}")
+    @PutMapping("/restore/{id}")
     public void restoreById(@PathVariable Long id) {
     }
 

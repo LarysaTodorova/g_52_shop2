@@ -48,7 +48,7 @@ public class CustomerController {
     }
 
     //  Восстановить удалённого покупателя в базе данных по его идентификатору.
-    @PutMapping("/{id}")
+    @PutMapping("/restore/{id}")
     public void restoreById(@PathVariable Long id) {
 
     }
