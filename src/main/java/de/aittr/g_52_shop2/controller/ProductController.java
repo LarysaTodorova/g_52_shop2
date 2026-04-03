@@ -89,6 +89,9 @@ public class ProductController {
 
     // DELETE -> http://12.34.56.78:8080/products?title=banana - вариант 2
     // При таком варианте мы бы использовали аннотацию @RequestParam
+//    @DeleteMapping
+//    public void deleteByTitle(@RequestParam String title) {
+//    }
 
     //    Восстановить удалённый продукт в базе данных по его идентификатору.
     // PUT -> http://12.34.56.78:8080/products/restore/5
