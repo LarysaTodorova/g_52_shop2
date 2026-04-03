@@ -40,8 +40,11 @@ public class CustomerController {
     }
 
     //  Удалить покупателя из базы данных по его имени.
-    @DeleteMapping("/by-name/{name}")
-    public void deleteByName(@PathVariable String name) {
+//    @DeleteMapping("/by-name/{name}")
+//    public void deleteByName(@PathVariable String name) {
+//    }
+    @DeleteMapping
+    public void deleteByName(@RequestParam String name) {
     }
 
     //  Восстановить удалённого покупателя в базе данных по его идентификатору.
