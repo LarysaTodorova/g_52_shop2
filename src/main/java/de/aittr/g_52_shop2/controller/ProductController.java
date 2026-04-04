@@ -1,6 +1,7 @@
 package de.aittr.g_52_shop2.controller;
 
 import de.aittr.g_52_shop2.domain.entity.Product;
+import de.aittr.g_52_shop2.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,6 +28,12 @@ IoC - Inversion of Control (инверсия контроля) - этот при
 @RequestMapping("/products")
 public class ProductController {
 
+    private final ProductService service;
+
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
+
     // Разработаем REST-API для нашего приложения.
     // Разработать REST-API - это значит определить, на какие энд-поинты
     // должен обращаться клиент, чтобы выполнить те или иные операции.
@@ -43,14 +50,14 @@ public class ProductController {
      */
     @PostMapping
     public Product save(@RequestBody Product product) {
-        return null;
+        return service.save(product);
     }
 
     //    Вернуть все продукты из базы данных (активные).
     // GET -> http://12.34.56.78:8080/products/all
     @GetMapping("/all")
     public List<Product> getAll() {
-        return null;
+        return service.getAllActiveProducts();
     }
 
     //    Вернуть один продукт из базы данных по его идентификатору (если он активен).
@@ -64,27 +71,28 @@ public class ProductController {
 //    @GetMapping("/{id}/test/{title}") - пример с несколькими параметрами
     @GetMapping("/{id}")
     public Product getById(@PathVariable Long id) {
-        return null;
+        return service.getById(id);
     }
 
     //    Изменить один продукт в базе данных по его идентификатору.
     // PUT -> http://12.34.56.78:8080/products (идентификатор будем отправлять в теле)
     @PutMapping
     public void update(@RequestBody Product product) {
-
+        service.update(product);
     }
 
     //    Удалить продукт из базы данных по его идентификатору.
     // DELETE -> http://12.34.56.78:8080/products/5
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
-
+        service.deleteById(id);
     }
 
     //    Удалить продукт из базы данных по его наименованию.
     // DELETE -> http://12.34.56.78:8080/products/by-title/banana - вариант 1
     @DeleteMapping("/by-title/{title}")
     public void deleteByTitle(@PathVariable String title) {
+        service.deleteByTitle(title);
     }
 
     // DELETE -> http://12.34.56.78:8080/products?title=banana - вариант 2
@@ -97,26 +105,27 @@ public class ProductController {
     // PUT -> http://12.34.56.78:8080/products/restore/5
     @PutMapping("/restore/{id}")
     public void restoreById(@PathVariable Long id) {
+        service.restoreById(id);
     }
 
     //    Вернуть общее количество продуктов в базе данных (активных).
     // GET -> http://12.34.56.78:8080/products/quantity
     @GetMapping("/quantity")
     public long getProductsQuantity() {
-        return 0;
+        return service.getAllActiveProductsCount();
     }
 
     //    Вернуть суммарную стоимость всех продуктов в базе данных (активных).
     // GET -> http://12.34.56.78:8080/products/total-cost
     @GetMapping("/total-cost")
     public BigDecimal getProductsTotalCost() {
-        return null;
+        return service.getAllActiveTotalCost();
     }
 
     //    Вернуть среднюю стоимость продукта в базе данных (из активных).
     // GET -> http://12.34.56.78:8080/products/avg-price
     @GetMapping("/avg-price")
     public BigDecimal getProductAveragePrice() {
-        return null;
+        return service.getAllActiveProductsAveragePrice();
     }
 }
