@@ -7,11 +7,25 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+/*
+Аннотация @Service говорит Спрингу о том, что на старте приложения
+нужно создать объект этого класса и поместить его в Спринг контекст.
+Кроме того, данная аннотация носит информационный характер,
+она говорит нам о том, что перед нами класс сервиса.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
 
+    /*
+    Когда Спринг будет создавать объект сервиса продуктов, он вызовет
+    этот конструктор (потому что вариантов других нет), а в этот конструктор
+    требуется передать объект репозитория. Поэтому Спринг обратится в
+    контекст, достанет оттуда репозиторий и передаст в этот параметр.
+    А объект репозитория там уже будет находиться благодаря наследованию
+    нашего интерфейса репозитория от JpaRepository.
+     */
     public ProductServiceImpl(ProductRepository repository) {
         this.repository = repository;
     }
