@@ -1,7 +1,10 @@
 package de.aittr.g_52_shop2.service;
 
+import de.aittr.g_52_shop2.domain.dto.ProductDto;
 import de.aittr.g_52_shop2.domain.entity.Product;
 import de.aittr.g_52_shop2.repository.ProductRepository;
+import de.aittr.g_52_shop2.service.interfaces.ProductService;
+import de.aittr.g_52_shop2.service.mapping.ProductMappingService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,6 +20,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
+    private final ProductMappingService mappingService;
 
     /*
     Когда Спринг будет создавать объект сервиса продуктов, он вызовет
@@ -26,36 +30,39 @@ public class ProductServiceImpl implements ProductService {
     А объект репозитория там уже будет находиться благодаря наследованию
     нашего интерфейса репозитория от JpaRepository.
      */
-    public ProductServiceImpl(ProductRepository repository) {
+    public ProductServiceImpl(ProductRepository repository, ProductMappingService mappingService) {
         this.repository = repository;
+        this.mappingService = mappingService;
     }
 
     @Override
-    public Product save(Product product) {
-        product.setActive(true);
-        return repository.save(product);
+    public ProductDto save(ProductDto dto) {
+        Product entity = mappingService.mapDtoToEntity(dto);
+        entity = repository.save(entity);
+        return mappingService.mapEntityToDto(entity);
     }
 
     @Override
-    public List<Product> getAllActiveProducts() {
+    public List<ProductDto> getAllActiveProducts() {
         return repository.findAll()
                 .stream()
                 .filter(Product::isActive)
+                .map(mappingService::mapEntityToDto)
                 .toList();
     }
 
     @Override
-    public Product getById(Long id) {
+    public ProductDto getById(Long id) {
         Product product = repository.findById(id).orElse(null);
 
         if (product == null || !product.isActive()) {
             return null;
         }
-        return product;
+        return mappingService.mapEntityToDto(product);
     }
 
     @Override
-    public void update(Product product) {
+    public void update(ProductDto product) {
 
     }
 
@@ -76,14 +83,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public long getAllActiveProductsCount() {
-        return getAllActiveProducts().size();
+        return repository.findAll()
+                .stream()
+                .filter(Product::isActive)
+                .count();
     }
 
     @Override
     public BigDecimal getAllActiveTotalCost() {
         return getAllActiveProducts()
                 .stream()
-                .map(Product::getPrice)
+                .map(ProductDto::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

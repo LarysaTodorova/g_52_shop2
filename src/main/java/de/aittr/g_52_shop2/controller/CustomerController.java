@@ -1,7 +1,7 @@
 package de.aittr.g_52_shop2.controller;
 
 import de.aittr.g_52_shop2.domain.entity.Customer;
-import de.aittr.g_52_shop2.service.CustomerService;
+import de.aittr.g_52_shop2.service.interfaces.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

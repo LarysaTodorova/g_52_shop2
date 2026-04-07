@@ -2,6 +2,7 @@ package de.aittr.g_52_shop2.service;
 
 import de.aittr.g_52_shop2.domain.entity.Customer;
 import de.aittr.g_52_shop2.repository.CustomerRepository;
+import de.aittr.g_52_shop2.service.interfaces.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

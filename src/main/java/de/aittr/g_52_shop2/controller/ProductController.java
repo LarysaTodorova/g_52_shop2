@@ -1,7 +1,10 @@
 package de.aittr.g_52_shop2.controller;
 
-import de.aittr.g_52_shop2.domain.entity.Product;
-import de.aittr.g_52_shop2.service.ProductService;
+import de.aittr.g_52_shop2.domain.dto.ProductDto;
+import de.aittr.g_52_shop2.service.interfaces.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -26,6 +29,7 @@ IoC - Inversion of Control (инверсия контроля) - этот при
  */
 @RestController
 @RequestMapping("/products")
+@Tag(name = "Product controller", description = "Controller for various operations with Products")
 public class ProductController {
 
     // Это поле будет содержать объект сервиса продуктов,
@@ -61,14 +65,22 @@ public class ProductController {
     встроенного Jackson, и получившийся Джава-объект передать в параметр product.
      */
     @PostMapping
-    public Product save(@RequestBody Product product) {
+    public ProductDto save(
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Instance of a Product")
+            ProductDto product
+    ) {
         return service.save(product);
     }
 
     //    Вернуть все продукты из базы данных (активные).
     // GET -> http://12.34.56.78:8080/products/all
     @GetMapping("/all")
-    public List<Product> getAll() {
+    @Operation(
+            summary = "Get all products",
+            description = "Getting all products that exist in the database"
+    )
+    public List<ProductDto> getAll() {
         return service.getAllActiveProducts();
     }
 
@@ -82,14 +94,18 @@ public class ProductController {
      */
 //    @GetMapping("/{id}/test/{title}") - пример с несколькими параметрами
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
+    public ProductDto getById(
+            @PathVariable
+            @Parameter(description = "Product unique identifier")
+            Long id
+    ) {
         return service.getById(id);
     }
 
     //    Изменить один продукт в базе данных по его идентификатору.
     // PUT -> http://12.34.56.78:8080/products (идентификатор будем отправлять в теле)
     @PutMapping
-    public void update(@RequestBody Product product) {
+    public void update(@RequestBody ProductDto product) {
         service.update(product);
     }
 
