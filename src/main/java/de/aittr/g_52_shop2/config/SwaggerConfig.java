@@ -10,8 +10,8 @@ import io.swagger.v3.oas.annotations.info.Info;
                 description = "Application for various operations with Customers and Products",
                 version = "1.0.0",
                 contact = @Contact(
-                        name = "Andrey",
-                        email = "andrey@ait-tr.de",
+                        name = "Lora",
+                        email = "lorageo33@gmail.com",
                         url = "http://ait-tr.de"
                 )
         )
