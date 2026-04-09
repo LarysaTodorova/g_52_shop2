@@ -1,8 +1,10 @@
 package de.aittr.g_52_shop2.service;
 
+import de.aittr.g_52_shop2.domain.dto.CustomerDto;
 import de.aittr.g_52_shop2.domain.entity.Customer;
 import de.aittr.g_52_shop2.repository.CustomerRepository;
 import de.aittr.g_52_shop2.service.interfaces.CustomerService;
+import de.aittr.g_52_shop2.service.mapping.CustomerMappingService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,37 +13,41 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
+    private final CustomerMappingService mappingService;
 
-    public CustomerServiceImpl(CustomerRepository repository) {
+    public CustomerServiceImpl(CustomerRepository repository, CustomerMappingService mappingService) {
         this.repository = repository;
+        this.mappingService = mappingService;
     }
 
     @Override
-    public Customer save(Customer customer) {
-        customer.setActive(true);
-        return repository.save(customer);
+    public CustomerDto save(CustomerDto dto) {
+        Customer entity = mappingService.fromDtoToEntity(dto);
+        entity = repository.save(entity);
+        return mappingService.fromEntityToDto(entity);
     }
 
     @Override
-    public List<Customer> findAll() {
+    public List<CustomerDto> findAllActiveCustomers() {
         return repository.findAll()
                 .stream()
                 .filter(Customer::isActive)
+                .map(mappingService::fromEntityToDto)
                 .toList();
     }
 
     @Override
-    public Customer findById(Long id) {
+    public CustomerDto findById(Long id) {
         Customer customer = repository.findById(id).orElse(null);
 
         if (customer == null || !customer.isActive()) {
             return null;
         }
-        return customer;
+        return mappingService.fromEntityToDto(customer);
     }
 
     @Override
-    public void update(Customer customer) {
+    public void update(CustomerDto customer) {
 
     }
 

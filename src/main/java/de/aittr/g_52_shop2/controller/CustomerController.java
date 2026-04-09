@@ -1,13 +1,17 @@
 package de.aittr.g_52_shop2.controller;
 
-import de.aittr.g_52_shop2.domain.entity.Customer;
+import de.aittr.g_52_shop2.domain.dto.CustomerDto;
 import de.aittr.g_52_shop2.service.interfaces.CustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
+@Tag(name = "Customer controller", description = "Controller for various operations with Customers")
 public class CustomerController {
 
     private final CustomerService service;
@@ -18,25 +22,37 @@ public class CustomerController {
 
     //  Сохранить покупателя в базе данных (при сохранении покупатель автоматически считается активным).
     @PostMapping
-    public Customer save(@RequestBody Customer customer) {
+    public CustomerDto save(
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Instance of a Customer")
+            CustomerDto customer
+    ) {
         return service.save(customer);
     }
 
     // Вернуть всех покупателей из базы данных (активных).
     @GetMapping("/all")
-    public List<Customer> getAll() {
-        return service.findAll();
+    @Operation(
+            summary = "Get all customers",
+            description = "Getting all customers that exist in the database"
+    )
+    public List<CustomerDto> getAll() {
+        return service.findAllActiveCustomers();
     }
 
     //  Вернуть одного покупателя из базы данных по его идентификатору (если он активен).
     @GetMapping("/{id}")
-    public Customer getById(@PathVariable Long id) {
+    public CustomerDto getById(
+            @PathVariable
+            @Parameter(description = "Product unique identifier")
+            Long id
+    ) {
         return service.findById(id);
     }
 
     //  Изменить одного покупателя в базе данных по его идентификатору.
     @PutMapping
-    public void update(@RequestBody Customer customer) {
+    public void update(@RequestBody CustomerDto customer) {
         service.update(customer);
     }
 

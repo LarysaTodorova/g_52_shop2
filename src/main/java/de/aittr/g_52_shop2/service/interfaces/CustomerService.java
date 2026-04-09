@@ -1,22 +1,22 @@
 package de.aittr.g_52_shop2.service.interfaces;
 
-import de.aittr.g_52_shop2.domain.entity.Customer;
+import de.aittr.g_52_shop2.domain.dto.CustomerDto;
 
 import java.util.List;
 
 public interface CustomerService {
 
     //   • Сохранить покупателя в базе данных (при сохранении покупатель автоматически считается активным).
-    Customer save(Customer customer);
+    CustomerDto save(CustomerDto customer);
 
     //   • Вернуть всех покупателей из базы данных (активных).
-    List<Customer> findAll();
+    List<CustomerDto> findAllActiveCustomers();
 
     //   • Вернуть одного покупателя из базы данных по его идентификатору (если он активен).
-    Customer findById(Long id);
+    CustomerDto findById(Long id);
 
     //   • Изменить одного покупателя в базе данных по его идентификатору.
-    void update(Customer customer);
+    void update(CustomerDto customer);
 
     //   • Удалить покупателя из базы данных по его идентификатору.
     void deleteById(Long id);
