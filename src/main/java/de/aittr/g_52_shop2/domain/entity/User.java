@@ -1,15 +1,10 @@
 package de.aittr.g_52_shop2.domain.entity;
 
-import de.aittr.g_52_shop2.repository.UserRepository;
-import de.aittr.g_52_shop2.service.UserServiceImpl;
-import de.aittr.g_52_shop2.service.interfaces.UserService;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
