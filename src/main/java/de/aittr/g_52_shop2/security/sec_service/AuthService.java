@@ -20,7 +20,6 @@ public class AuthService {
     private final Map<String, String> refreshStorage;
     private final BCryptPasswordEncoder passwordEncoder;
 
-
     public AuthService(UserService userService, TokenService tokenService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.tokenService = tokenService;
