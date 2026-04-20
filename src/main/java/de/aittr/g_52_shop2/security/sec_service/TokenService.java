@@ -31,7 +31,6 @@ public class TokenService {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(accessPhrase));
         this.refreshKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(refreshPhrase));
         this.roleRepository = roleRepository;
-
     }
 
     public String generateAccessToken(UserDetails user) {
@@ -111,6 +110,7 @@ public class TokenService {
 
         for (LinkedHashMap<String, String> roleEntry : rolesList) {
             String roleTitle = roleEntry.get("authority");
+            // roleRepository.findByTitle(roleTitle).ifPresent(x -> roles.add(x));
             roleRepository.findByTitle(roleTitle).ifPresent(roles::add);
         }
 
