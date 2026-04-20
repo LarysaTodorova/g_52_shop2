@@ -46,12 +46,12 @@ public class AuthInfo implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles;
     }
 
     @Override
     public @Nullable Object getCredentials() {
-        return roles;
+        return null;
     }
 
     @Override
