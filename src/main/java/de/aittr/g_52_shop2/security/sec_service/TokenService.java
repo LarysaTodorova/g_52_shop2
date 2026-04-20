@@ -1,7 +1,6 @@
 package de.aittr.g_52_shop2.security.sec_service;
 
 import de.aittr.g_52_shop2.domain.entity.Role;
-import de.aittr.g_52_shop2.domain.entity.User;
 import de.aittr.g_52_shop2.repository.RoleRepository;
 import de.aittr.g_52_shop2.security.AuthInfo;
 import io.jsonwebtoken.Claims;
