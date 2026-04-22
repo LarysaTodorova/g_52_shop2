@@ -48,6 +48,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
 
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
