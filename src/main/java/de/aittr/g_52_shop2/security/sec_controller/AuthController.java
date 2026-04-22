@@ -17,7 +17,7 @@ public class AuthController {
         this.service = service;
     }
 
-    @PutMapping("/login")
+    @PostMapping("/login")
     public TokenResponseDto login(@RequestBody User user) {
         try {
             return service.login(user);

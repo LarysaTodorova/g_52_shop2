@@ -45,6 +45,9 @@ public class SecurityConfig {
                 // При помощи этого метода мы конфигурируем доступ к разному функционалу
                 // приложения для разных ролей пользователей
                 .authorizeHttpRequests(x -> x
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
@@ -54,3 +57,5 @@ public class SecurityConfig {
                 .build();
     }
 }
+
+
