@@ -19,6 +19,11 @@ public class Customer {
     @Column(name = "active")
     private boolean active;
 
+    // Связь один-к-одному со стороны той таблицы, в которой нет
+    // колонки, которая ссылается на другую таблицу
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Cart cart;
+
     public Customer() {
     }
 
@@ -46,16 +51,24 @@ public class Customer {
         this.active = active;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return active == customer.active && Objects.equals(id, customer.id) && Objects.equals(name, customer.name);
+        return active == customer.active && Objects.equals(id, customer.id) && Objects.equals(name, customer.name) && Objects.equals(cart, customer.cart);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, active);
+        return Objects.hash(id, name, active, cart);
     }
 
     @Override
