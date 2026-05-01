@@ -1,7 +1,6 @@
 package de.aittr.g_52_shop2.security;
 
 import de.aittr.g_52_shop2.domain.entity.Role;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -49,17 +48,17 @@ public class AuthInfo implements Authentication {
     }
 
     @Override
-    public @Nullable Object getCredentials() {
+    public Object getCredentials() {
         return null;
     }
 
     @Override
-    public @Nullable Object getDetails() {
+    public Object getDetails() {
         return null;
     }
 
     @Override
-    public @Nullable Object getPrincipal() {
+    public Object getPrincipal() {
         return username;
     }
 

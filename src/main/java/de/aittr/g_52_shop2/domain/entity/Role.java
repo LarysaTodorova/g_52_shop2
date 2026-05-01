@@ -1,7 +1,6 @@
 package de.aittr.g_52_shop2.domain.entity;
 
 import jakarta.persistence.*;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
@@ -57,7 +56,7 @@ public class Role implements GrantedAuthority {
     // Этот метод используется фреймворком Spring Security,
     // при помощи этого метода он узнаёт, как называется наша роль
     @Override
-    public @Nullable String getAuthority() {
+    public String getAuthority() {
         return title;
     }
 }
