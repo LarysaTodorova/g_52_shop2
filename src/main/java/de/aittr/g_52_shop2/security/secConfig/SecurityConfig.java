@@ -57,6 +57,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/customers/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/customers/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole( "ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class)

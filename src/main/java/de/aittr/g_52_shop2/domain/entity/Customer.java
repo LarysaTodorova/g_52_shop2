@@ -57,6 +57,10 @@ public class Customer {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+
+        if(cart != null) {
+            cart.setCustomer(this);
+        }
     }
 
     @Override

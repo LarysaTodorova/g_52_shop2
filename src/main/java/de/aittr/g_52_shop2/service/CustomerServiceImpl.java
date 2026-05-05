@@ -24,6 +24,9 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto save(CustomerDto dto) {
         Customer entity = mappingService.fromDtoToEntity(dto);
         entity = repository.save(entity);
+        if (entity.getCart() != null) {
+            entity.getCart().setCustomer(entity);
+        }
         return mappingService.fromEntityToDto(entity);
     }
 
