@@ -110,6 +110,21 @@ class CustomerControllerTestIT {
         assertNotNull(response.getBody(), "Response body should not be null");
     }
 
+    @Test
+    @Order(4)
+    public void chekForbiddenStatusWhileGettingCustomerByIdWithoutAuthorization() {
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        ResponseEntity<CustomerDto> response = restTemplate.exchange(
+                "/customers/1", HttpMethod.GET, request, CustomerDto.class
+        );
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode(), "Unexpected http status");
+        assertNull(response.getBody(), "Response body should be null");
+    }
+
     private CustomerDto createTestCustomer() {
         CustomerDto customer = new CustomerDto();
         customer.setName("test customer");
@@ -128,5 +143,4 @@ class CustomerControllerTestIT {
                 .signWith(accessKey)
                 .compact();
     }
-
 }
