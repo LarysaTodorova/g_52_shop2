@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CustomerControllerTestIT {
 
     @Autowired
@@ -39,6 +40,7 @@ class CustomerControllerTestIT {
     private final String BEARER_PREFIX = "Bearer ";
 
     private CustomerDto testCustomer;
+    private Long customerId;
 
     @BeforeEach
     public void setUp() {
@@ -90,12 +92,15 @@ class CustomerControllerTestIT {
         assertEquals(testCustomer.getName(), savedCustomer.getName(), "Saved customer has incorrect name");
         assertNotNull(savedCustomer.getCart(), "Saved customer cart should not be null");
 
-        repository.deleteById(savedCustomer.getId());
+        customerId = savedCustomer.getId();
+
+       // repository.deleteById(savedCustomer.getId());
     }
 
     @Test
     @Order(3)
-    public void checkSuccessWhileGettingCustomerWithAdminToken() {
+    public void checkSuccessWhileGettingCustomerByIdWithAdminToken() {
+
         HttpHeaders headers = new HttpHeaders();
 
         headers.add(HttpHeaders.AUTHORIZATION, adminAccessToken);
@@ -103,7 +108,10 @@ class CustomerControllerTestIT {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<CustomerDto> response = restTemplate.exchange(
-                "/customers/1", HttpMethod.GET, request, CustomerDto.class
+                "/customers/" + customerId,
+                HttpMethod.GET,
+                request,
+                CustomerDto.class
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), "Unexpected http status");
@@ -113,18 +121,38 @@ class CustomerControllerTestIT {
     @Test
     @Order(4)
     public void chekForbiddenStatusWhileGettingCustomerByIdWithoutAuthorization() {
+
         HttpHeaders headers = new HttpHeaders();
 
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<CustomerDto> response = restTemplate.exchange(
-                "/customers/1",
+                "/customers/" + customerId ,
                 HttpMethod.GET,
                 request,
                 CustomerDto.class
         );
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode(), "Unexpected http status");
+        assertNull(response.getBody(), "Response body should be null");
+    }
+
+    @Test
+    @Order(5)
+    public void checkSuccessWhileDeletingCustomerWithAdminToken() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, adminAccessToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Void> response = restTemplate.exchange(
+                "/customers/" + customerId,
+                HttpMethod.DELETE,
+                request,
+                Void.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Unexpected http status");
         assertNull(response.getBody(), "Response body should be null");
     }
 

@@ -64,9 +64,9 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN")
 //
 //                        .anyRequest().authenticated()
-                        // TODO раскомментировать код обратно
+                                // TODO раскомментировать код обратно
 
-                        .anyRequest().permitAll()
+                                .anyRequest().permitAll()
                 )
                 .addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();
