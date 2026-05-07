@@ -6,6 +6,7 @@ import de.aittr.g_52_shop2.repository.ProductRepository;
 import de.aittr.g_52_shop2.service.interfaces.ProductService;
 import de.aittr.g_52_shop2.service.mapping.ProductMappingService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -61,9 +62,19 @@ public class ProductServiceImpl implements ProductService {
         return mappingService.mapEntityToDto(product);
     }
 
+    // Аннотация @Transactional служит для того, чтобы транзакция,
+    // открытая в БД, действовала на протяжении всей работы метода.
+    // Таким образом мы сохраняем наш продукт в состоянии managed,
+    // и все изменения, которые мы вносим в этот Джава-объект,
+    // автоматически попадают в БД согласно концепции ORM.
     @Override
+    @Transactional
     public void update(ProductDto product) {
-
+        Long id = product.getId();
+        Product existedProduct = repository.findById(id)
+                .filter(Product::isActive)
+                .orElseThrow(() -> new RuntimeException("Product with id " + id + " not found"));
+        existedProduct.setPrice(product.getPrice());
     }
 
     @Override

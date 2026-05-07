@@ -118,7 +118,10 @@ class CustomerControllerTestIT {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<CustomerDto> response = restTemplate.exchange(
-                "/customers/1", HttpMethod.GET, request, CustomerDto.class
+                "/customers/1",
+                HttpMethod.GET,
+                request,
+                CustomerDto.class
         );
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode(), "Unexpected http status");
