@@ -5,6 +5,8 @@ import de.aittr.g_52_shop2.domain.entity.Product;
 import de.aittr.g_52_shop2.repository.ProductRepository;
 import de.aittr.g_52_shop2.service.interfaces.ProductService;
 import de.aittr.g_52_shop2.service.mapping.ProductMappingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
     private final ProductMappingService mappingService;
+
+    // Это объект логгера, при помощи него осуществляется логирование.
+    private final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     /*
     Когда Спринг будет создавать объект сервиса продуктов, он вызовет
@@ -45,6 +50,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllActiveProducts() {
+
+        // При помощи разных методов объекта логгера мы можем фиксировать
+        // события, происходящие в программе на разные уровни
+//        logger.info("Request for all products received.");
+//        logger.warn("Request for all products received.");
+//        logger.error("Request for all products received.");
+
         return repository.findAll()
                 .stream()
                 .filter(Product::isActive)
@@ -57,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = repository.findById(id).orElse(null);
 
         if (product == null || !product.isActive()) {
-            return null;
+            throw new RuntimeException("Product with id " + id + " not found");
         }
         return mappingService.mapEntityToDto(product);
     }

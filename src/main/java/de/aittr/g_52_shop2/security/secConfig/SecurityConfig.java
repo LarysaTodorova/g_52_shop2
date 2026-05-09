@@ -65,7 +65,6 @@ public class SecurityConfig {
 //
 //                        .anyRequest().authenticated()
                                 // TODO раскомментировать код обратно
-
                                 .anyRequest().permitAll()
                 )
                 .addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class)
