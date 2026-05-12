@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = repository.findById(id).orElse(null);
 
         if (customer == null || !customer.isActive()) {
-            return null;
+            throw new RuntimeException("Customer with id " + id + " not found");
         }
         return mappingService.fromEntityToDto(customer);
     }
