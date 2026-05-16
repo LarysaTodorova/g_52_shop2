@@ -2,6 +2,8 @@ package de.aittr.g_52_shop2.service;
 
 import de.aittr.g_52_shop2.domain.dto.ProductDto;
 import de.aittr.g_52_shop2.domain.entity.Product;
+import de.aittr.g_52_shop2.exception_handling.exceptions.ProductNotFoundException;
+import de.aittr.g_52_shop2.exception_handling.exceptions.ProductValidationException;
 import de.aittr.g_52_shop2.repository.ProductRepository;
 import de.aittr.g_52_shop2.service.interfaces.ProductService;
 import de.aittr.g_52_shop2.service.mapping.ProductMappingService;
@@ -43,9 +45,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto save(ProductDto dto) {
-        Product entity = mappingService.mapDtoToEntity(dto);
-        entity = repository.save(entity);
-        return mappingService.mapEntityToDto(entity);
+        try {
+            Product entity = mappingService.mapDtoToEntity(dto);
+            entity = repository.save(entity);
+            return mappingService.mapEntityToDto(entity);
+        } catch (Exception e) {
+            throw new ProductValidationException(e);
+        }
     }
 
     @Override
@@ -66,12 +72,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getById(Long id) {
-        Product product = repository.findById(id).orElse(null);
+//        Product product = repository.findById(id).orElse(null);
+//
+//        if (product == null || !product.isActive()) {
+//            throw new ProductNotFoundException(id);
+//        }
+//        return mappingService.mapEntityToDto(product);
 
-        if (product == null || !product.isActive()) {
-            throw new RuntimeException("Product with id " + id + " not found");
-        }
-        return mappingService.mapEntityToDto(product);
+        return mappingService.mapEntityToDto(
+                repository.findById(id)
+                        .filter(Product::isActive)
+                        .orElseThrow(() -> new ProductNotFoundException(id))
+        );
     }
 
     // Аннотация @Transactional служит для того, чтобы транзакция,

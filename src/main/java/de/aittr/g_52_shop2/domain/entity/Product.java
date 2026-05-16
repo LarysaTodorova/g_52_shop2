@@ -1,6 +1,7 @@
 package de.aittr.g_52_shop2.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -27,10 +28,29 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
+    /*
+    Мы хотим, чтобы название продукта соответствовало требованиям:
+    1. Не должно быть короче трёх символов.
+    2. Не должно содержать цифры и спец.символы.
+    3. Первая буква должна быть в верхнем регистре.
+    4. Остальные буквы должны быть в нижнем регистре.
+     */
     @Column(name = "title")
+    @NotNull(message = "Product title can not be null")
+    @NotBlank(message = "Product title can not be empty")
+    @Pattern(regexp = "[A-Z][a-z ]{2,}",
+            message = "Product title must start with capital letter and should be at least three characters length"
+    )
     private String title;
 
     @Column(name = "price")
+    @DecimalMin(value = "0.01",
+            message = "Product price must be greater or equals than 0.01"
+    )
+    @DecimalMax(value = "1000.0",
+            inclusive = false,
+            message = "Product price must be less than 1000"
+    )
     private BigDecimal price;
 
     @Column(name = "active")
