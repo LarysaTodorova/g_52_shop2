@@ -1,6 +1,9 @@
 package de.aittr.g_52_shop2.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Objects;
 
@@ -14,6 +17,12 @@ public class Customer {
     private Long id;
 
     @Column(name = "name")
+    @NotNull(message = "Customer name cannot be empty")
+    @NotBlank(message = "Customer name cannot be empty")
+    @Pattern(
+            regexp = "[A-Z][a-z ]{2,}",
+            message = "Customer name must start with capital letter and should be at least three characters length"
+    )
     private String name;
 
     @Column(name = "active")
@@ -58,7 +67,7 @@ public class Customer {
     public void setCart(Cart cart) {
         this.cart = cart;
 
-        if(cart != null) {
+        if (cart != null) {
             cart.setCustomer(this);
         }
     }
