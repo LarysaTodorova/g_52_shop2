@@ -2,6 +2,7 @@ package de.aittr.g_52_shop2.service;
 
 import de.aittr.g_52_shop2.domain.dto.ProductDto;
 import de.aittr.g_52_shop2.domain.entity.Product;
+import de.aittr.g_52_shop2.exception_handling.exceptions.EntityNotFoundException;
 import de.aittr.g_52_shop2.exception_handling.exceptions.ProductNotFoundException;
 import de.aittr.g_52_shop2.exception_handling.exceptions.ProductValidationException;
 import de.aittr.g_52_shop2.repository.ProductRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 /*
 Аннотация @Service говорит Спрингу о том, что на старте приложения
@@ -79,10 +81,12 @@ public class ProductServiceImpl implements ProductService {
 //        }
 //        return mappingService.mapEntityToDto(product);
 
+        Objects.requireNonNull(id, "Product id cannot be null");
+
         return mappingService.mapEntityToDto(
                 repository.findById(id)
                         .filter(Product::isActive)
-                        .orElseThrow(() -> new ProductNotFoundException(id))
+                        .orElseThrow(() -> new EntityNotFoundException(Product.class, id))
         );
     }
 

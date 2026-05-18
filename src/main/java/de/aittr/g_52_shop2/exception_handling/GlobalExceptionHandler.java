@@ -1,20 +1,23 @@
 package de.aittr.g_52_shop2.exception_handling;
 
-import de.aittr.g_52_shop2.exception_handling.exceptions.CustomerNotFoundException;
-import de.aittr.g_52_shop2.exception_handling.exceptions.CustomerValidationException;
-import de.aittr.g_52_shop2.exception_handling.exceptions.ProductNotFoundException;
-import de.aittr.g_52_shop2.exception_handling.exceptions.ProductValidationException;
+import de.aittr.g_52_shop2.exception_handling.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /*
-Аннотация @ControllerAdvice говорит о том, что перед нами - адвайс,
+Аннотация @RestControllerAdvice говорит о том, что перед нами - контроллер адвайс,
 глобальный обработчик ошибок, которые возникают во всём проекте.
+ Он не только обрабатывает ошибки, но и упаковывает их в response и отправляет клиенту.
+Он одновременно является и restController и обработчиком ошибок.
  */
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
      /*
     ResponseEntity - это специальный объект, внутрь которого мы можем
@@ -34,10 +37,21 @@ public class GlobalExceptionHandler {
             ошибок для разных контроллеров. В таком случае лучше воспользоваться
             первыми двумя способами
      */
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<Response> handleException(ProductNotFoundException e) {
-        Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleException(EntityNotFoundException e) {
+        String message = e.getMessage();
+        logger.warn(message);
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<String> handleException(NullPointerException e) {
+        String message = e.getMessage();
+        logger.error(message);
+        return new ResponseEntity<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
     @ExceptionHandler(ProductValidationException.class)

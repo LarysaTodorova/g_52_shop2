@@ -1,0 +1,7 @@
+package de.aittr.g_52_shop2.exception_handling.exceptions;
+
+public class EntityNotFoundException extends RuntimeException {
+    public EntityNotFoundException(Class<?> entityType, Long id) {
+        super(String.format("%s with id %d not found", entityType.getSimpleName(), id));
+    }
+}
