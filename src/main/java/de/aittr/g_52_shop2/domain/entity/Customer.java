@@ -17,7 +17,7 @@ public class Customer {
     private Long id;
 
     @Column(name = "name")
-    @NotNull(message = "Customer name cannot be empty")
+    @NotNull(message = "Customer name cannot be null")
     @NotBlank(message = "Customer name cannot be empty")
     @Pattern(
             regexp = "[A-Z][a-z ]{2,}",

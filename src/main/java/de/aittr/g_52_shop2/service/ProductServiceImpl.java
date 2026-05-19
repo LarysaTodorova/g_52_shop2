@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /*
 Аннотация @Service говорит Спрингу о том, что на старте приложения
@@ -47,13 +48,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto save(ProductDto dto) {
-        try {
+        Objects.requireNonNull(dto, "Product dto cannot be null");
+
             Product entity = mappingService.mapDtoToEntity(dto);
             entity = repository.save(entity);
             return mappingService.mapEntityToDto(entity);
-        } catch (Exception e) {
-            throw new ProductValidationException(e);
-        }
     }
 
     @Override
@@ -98,21 +97,33 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void update(ProductDto product) {
+        Objects.requireNonNull(product, "Product cannot be null");
+
         Long id = product.getId();
         Product existedProduct = repository.findById(id)
                 .filter(Product::isActive)
-                .orElseThrow(() -> new RuntimeException("Product with id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Product.class, id));
         existedProduct.setPrice(product.getPrice());
     }
 
     @Override
     public void deleteById(Long id) {
 
+        Objects.requireNonNull(id, "Product id cannot be null");
+
+        repository.findById(id)
+                .filter(Product::isActive)
+                .orElseThrow(() -> new EntityNotFoundException(Product.class, id))
+                .setActive(false);
     }
 
     @Override
     public void deleteByTitle(String title) {
+        Objects.requireNonNull(title, "Product title cannot be null");
 
+        repository.findByTitle(title)
+                .orElseThrow(() -> new RuntimeException("Product with title " + title + " not found"))
+                .setActive(false);
     }
 
     @Override

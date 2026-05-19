@@ -1,12 +1,16 @@
 package de.aittr.g_52_shop2.exception_handling;
 
 import de.aittr.g_52_shop2.exception_handling.exceptions.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 /*
 Аннотация @RestControllerAdvice говорит о том, что перед нами - контроллер адвайс,
@@ -44,6 +48,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
+    //    @ExceptionHandler(EntityNotFoundException.class)
+//    public ResponseEntity<Response> handleException(EntityNotFoundException e) {
+//        Response response = new Response(e.getMessage());
+//        logger.warn(response.getMessage());
+//        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+//    }
+
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleException(NullPointerException e) {
         String message = e.getMessage();
@@ -54,21 +65,31 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ProductValidationException.class)
-    public ResponseEntity<Response> handleException(ProductValidationException e) {
-        Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List<String>> handleException(ConstraintViolationException e) {
+        List<String> messages = e.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessage)
+                .toList();
+
+        messages.forEach(logger::warn);
+        return new ResponseEntity<>(messages, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<Response> handleException(CustomerNotFoundException e) {
-        Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(CustomerValidationException.class)
-    public ResponseEntity<Response> handleException(CustomerValidationException e) {
-        Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(ProductValidationException.class)
+//    public ResponseEntity<Response> handleException(ProductValidationException e) {
+//        Response response = new Response(e.getMessage());
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
+//
+//    @ExceptionHandler(CustomerNotFoundException.class)
+//    public ResponseEntity<Response> handleException(CustomerNotFoundException e) {
+//        Response response = new Response(e.getMessage());
+//        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+//    }
+//
+//    @ExceptionHandler(CustomerValidationException.class)
+//    public ResponseEntity<Response> handleException(CustomerValidationException e) {
+//        Response response = new Response(e.getMessage());
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
 }
