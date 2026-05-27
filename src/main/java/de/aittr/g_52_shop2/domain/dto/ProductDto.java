@@ -21,6 +21,8 @@ public class ProductDto {
     @Schema(description = "Product price", example = "7.00")
     private BigDecimal price;
 
+    private String imageUrl;
+
     public Long getId() {
         return id;
     }
@@ -45,16 +47,25 @@ public class ProductDto {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ProductDto that = (ProductDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(price, that.price);
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(price, that.price) && Objects.equals(imageUrl, that.imageUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, price);
+        return Objects.hash(id, title, price, imageUrl);
     }
 
     @Override
