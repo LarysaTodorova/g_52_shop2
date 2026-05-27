@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -185,4 +186,11 @@ public class ProductController {
 //    public Response handleException(ProductNotFoundException e) {
 //        return new Response(e.getMessage());
 //    }
+
+    // Добавить картинку к конкретному продукту по его идентификатору
+    // POST -> http://10.20.30.40:8080/products/7/image
+    @PostMapping(value = "/{id}/image", consumes = "multipart/form-data")
+    public void addImage(@PathVariable Long id, @RequestParam MultipartFile image) {
+        service.addImage(id, image);
+    }
 }

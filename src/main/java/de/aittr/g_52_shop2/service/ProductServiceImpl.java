@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,9 +51,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto save(ProductDto dto) {
         Objects.requireNonNull(dto, "Product dto cannot be null");
 
-            Product entity = mappingService.mapDtoToEntity(dto);
-            entity = repository.save(entity);
-            return mappingService.mapEntityToDto(entity);
+        Product entity = mappingService.mapDtoToEntity(dto);
+        entity = repository.save(entity);
+        return mappingService.mapEntityToDto(entity);
     }
 
     @Override
@@ -69,6 +70,15 @@ public class ProductServiceImpl implements ProductService {
                 .filter(Product::isActive)
                 .map(mappingService::mapEntityToDto)
                 .toList();
+    }
+
+    public Product getActiveEntityById(Long id) {
+        Objects.requireNonNull(id, "Product id cannot be null");
+
+        return repository.findByIdAndActiveTrue(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException(Product.class, id)
+                );
     }
 
     @Override
@@ -150,5 +160,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public BigDecimal getAllActiveProductsAveragePrice() {
         return null;
+    }
+
+    @Override
+    public void addImage(Long id, MultipartFile image) {
+        Objects.requireNonNull(id, "Product id cannot be null");
+
+        Product product = getActiveEntityById(id);
+        // Здесь будет обращение к сервису файлов и получение ссылки на файл
+        // Здесь будет присвоение этой ссылки нашему продукту
     }
 }

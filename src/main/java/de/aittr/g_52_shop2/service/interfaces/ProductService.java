@@ -1,6 +1,7 @@
 package de.aittr.g_52_shop2.service.interfaces;
 
 import de.aittr.g_52_shop2.domain.dto.ProductDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,4 +37,7 @@ public interface ProductService {
 
     //  • Вернуть среднюю стоимость продукта в базе данных (из активных).
     BigDecimal getAllActiveProductsAveragePrice();
+
+    // Добавление изображения к продукту
+    void addImage(Long id, MultipartFile image);
 }
