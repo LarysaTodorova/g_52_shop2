@@ -3,9 +3,8 @@ package de.aittr.g_52_shop2.service;
 import de.aittr.g_52_shop2.domain.dto.ProductDto;
 import de.aittr.g_52_shop2.domain.entity.Product;
 import de.aittr.g_52_shop2.exception_handling.exceptions.EntityNotFoundException;
-import de.aittr.g_52_shop2.exception_handling.exceptions.ProductNotFoundException;
-import de.aittr.g_52_shop2.exception_handling.exceptions.ProductValidationException;
 import de.aittr.g_52_shop2.repository.ProductRepository;
+import de.aittr.g_52_shop2.service.interfaces.FileService;
 import de.aittr.g_52_shop2.service.interfaces.ProductService;
 import de.aittr.g_52_shop2.service.mapping.ProductMappingService;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /*
 Аннотация @Service говорит Спрингу о том, что на старте приложения
@@ -30,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
     private final ProductMappingService mappingService;
+    private final FileService fileService;
 
     // Это объект логгера, при помощи него осуществляется логирование.
     private final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -42,9 +41,10 @@ public class ProductServiceImpl implements ProductService {
     А объект репозитория там уже будет находиться благодаря наследованию
     нашего интерфейса репозитория от JpaRepository.
      */
-    public ProductServiceImpl(ProductRepository repository, ProductMappingService mappingService) {
+    public ProductServiceImpl(ProductRepository repository, ProductMappingService mappingService, FileService fileService) {
         this.repository = repository;
         this.mappingService = mappingService;
+        this.fileService = fileService;
     }
 
     @Override
@@ -167,7 +167,8 @@ public class ProductServiceImpl implements ProductService {
         Objects.requireNonNull(id, "Product id cannot be null");
 
         Product product = getActiveEntityById(id);
-        // Здесь будет обращение к сервису файлов и получение ссылки на файл
+        String imageUrl = fileService.uploadAndGetUrl(image);
+
         // Здесь будет присвоение этой ссылки нашему продукту
     }
 }
