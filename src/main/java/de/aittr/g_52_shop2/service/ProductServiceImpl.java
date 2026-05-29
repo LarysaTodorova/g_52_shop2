@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -163,12 +164,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addImage(Long id, MultipartFile image) {
+    @Transactional
+    public void addImage(Long id, MultipartFile image) throws IOException {
         Objects.requireNonNull(id, "Product id cannot be null");
 
         Product product = getActiveEntityById(id);
         String imageUrl = fileService.uploadAndGetUrl(image);
-
-        // Здесь будет присвоение этой ссылки нашему продукту
+        product.setImageUrl(imageUrl);
     }
 }
