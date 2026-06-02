@@ -66,6 +66,13 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<String> handleException(RegistrationException e) {
+        String message = e.getMessage();
+        logger.warn(message, e);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<List<String>> handleException(ConstraintViolationException e) {
         List<String> messages = e.getConstraintViolations().stream()

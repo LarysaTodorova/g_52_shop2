@@ -9,6 +9,23 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/changelog-master.xml
 
+  mail:
+    username: lorajarik@gmail.com
+    password: ${GMAIL_APP_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        debug: false
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            protocols: TLSv1.2
+            trust: smtp.gmail.com
+
+
 key:
   access: KkOqMc3QoZ6ebVsnawwP0Tlysmaq6iCNlmOsgB0a/dQ=
   refresh: VXO0SJVx50ETJt17oqvreImZrrNzUX7ZA2APn7ny0M0=

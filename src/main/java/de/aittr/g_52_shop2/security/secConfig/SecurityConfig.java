@@ -45,27 +45,27 @@ public class SecurityConfig {
                 // При помощи этого метода мы конфигурируем доступ к разному функционалу
                 // приложения для разных ролей пользователей
                 .authorizeHttpRequests(x -> x
-//                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
-//
-//                        .requestMatchers(
-//                                "/swagger-ui/**",
-//                                "/swagger-ui.html",
-//                                "/v3/api-docs/**"
-//                        ).permitAll()
-//
-//                        .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/products/").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
-//                        .requestMatchers(HttpMethod.PUT, "/products").hasAnyRole("ADMIN")
-//
-//                        .requestMatchers(HttpMethod.GET, "/customers/all").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/customers/").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN")
-//
-//                        .anyRequest().authenticated()
-                                // TODO раскомментировать код обратно
-                                .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
+
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/products").hasAnyRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/customers/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/customers/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
+
+                        .anyRequest().authenticated()
                 )
                 .addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();
