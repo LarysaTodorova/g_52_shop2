@@ -2,7 +2,7 @@ package de.aittr.g_52_shop2.service.interfaces;
 
 import de.aittr.g_52_shop2.domain.entity.User;
 
-public interface EmailService {
+public interface ConfirmationCodeService {
 
-    void sendConfirmationEmail(User user);
+    String generateConfirmationCode(User user);
 }

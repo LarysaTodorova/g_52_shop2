@@ -100,6 +100,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<String> handleException(EmailSendingException e) {
+        String message = e.getMessage();
+        logger.error(message, e);
+        return new ResponseEntity<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
 //    @ExceptionHandler(ProductValidationException.class)
 //    public ResponseEntity<Response> handleException(ProductValidationException e) {
 //        Response response = new Response(e.getMessage());

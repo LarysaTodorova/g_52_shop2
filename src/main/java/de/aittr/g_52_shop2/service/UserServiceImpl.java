@@ -4,6 +4,7 @@ import de.aittr.g_52_shop2.domain.dto.UserRegistrationDto;
 import de.aittr.g_52_shop2.domain.entity.User;
 import de.aittr.g_52_shop2.exception_handling.exceptions.RegistrationException;
 import de.aittr.g_52_shop2.repository.UserRepository;
+import de.aittr.g_52_shop2.service.interfaces.EmailService;
 import de.aittr.g_52_shop2.service.interfaces.RoleService;
 import de.aittr.g_52_shop2.service.interfaces.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +20,18 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final EmailService emailService;
 
-    public UserServiceImpl(UserRepository repository, BCryptPasswordEncoder passwordEncoder, RoleService roleService) {
+    public UserServiceImpl(
+            UserRepository repository,
+            BCryptPasswordEncoder passwordEncoder,
+            RoleService roleService,
+            EmailService emailService
+    ) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
+        this.emailService = emailService;
     }
 
     // При помощи этого метода фреймворк будет получать из БД
@@ -63,6 +71,6 @@ public class UserServiceImpl implements UserService {
 
         repository.save(user);
 
-        // Отправляем пользователю письмо о том, что он должен подтвердить регистрацию
+        emailService.sendConfirmationEmail(user);
     }
 }

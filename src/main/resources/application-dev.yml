@@ -35,3 +35,7 @@ logging:
     name: logs/log.log
   level:
     root: info
+
+server:
+  host: localhost
+  port: 8080
