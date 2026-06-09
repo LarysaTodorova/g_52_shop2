@@ -4,6 +4,7 @@ import de.aittr.g_52_shop2.domain.dto.UserRegistrationDto;
 import de.aittr.g_52_shop2.domain.entity.User;
 import de.aittr.g_52_shop2.exception_handling.exceptions.RegistrationException;
 import de.aittr.g_52_shop2.repository.UserRepository;
+import de.aittr.g_52_shop2.service.interfaces.ConfirmationCodeService;
 import de.aittr.g_52_shop2.service.interfaces.EmailService;
 import de.aittr.g_52_shop2.service.interfaces.RoleService;
 import de.aittr.g_52_shop2.service.interfaces.UserService;
@@ -21,17 +22,20 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final RoleService roleService;
     private final EmailService emailService;
+    private final ConfirmationCodeService confirmationCodeService;
 
     public UserServiceImpl(
             UserRepository repository,
             BCryptPasswordEncoder passwordEncoder,
             RoleService roleService,
-            EmailService emailService
+            EmailService emailService,
+            ConfirmationCodeService confirmationCodeService
     ) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
         this.emailService = emailService;
+        this.confirmationCodeService = confirmationCodeService;
     }
 
     // При помощи этого метода фреймворк будет получать из БД
@@ -72,5 +76,12 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
 
         emailService.sendConfirmationEmail(user);
+    }
+
+    @Override
+    public void confirm(String code) {
+        User user = confirmationCodeService.getUserByConfirmationCode(code);
+        user.setActive(true);
+        repository.save(user);
     }
 }

@@ -80,6 +80,7 @@ public class EmailServiceImpl implements EmailService {
 
     private String generateConfirmationEmail(User user) {
         try {
+            // класс Template служит для создания образца самого шаблона письма
             Template template = mailConfig.getTemplate("confirm_registration_mail.ftlh");
             String code = confirmationCodeService.generateConfirmationCode(user);
             // http://localhost:8080/users/confirm/sd675ft-su6t-fs6f -
