@@ -32,7 +32,7 @@ public class ConfirmationCodeServiceImpl implements ConfirmationCodeService {
     @Override
     public User getUserByConfirmationCode(String code) {
         ConfirmationCode entity = repository.findByValue(code).orElseThrow(
-                () -> new RegistrationException("Confirmation code not found")
+                () -> new RegistrationException(String.format("Confirmation code %s not found", code))
         );
         return entity.getUser();
     }
