@@ -34,6 +34,13 @@ public class ConfirmationCodeServiceImpl implements ConfirmationCodeService {
         ConfirmationCode entity = repository.findByValue(code).orElseThrow(
                 () -> new RegistrationException(String.format("Confirmation code %s not found", code))
         );
+
+        if (entity.getExpiration().isBefore(LocalDateTime.now())) {
+            throw new RegistrationException(
+                    String.format("Confirmation code %s has expired", code)
+            );
+        }
+
         return entity.getUser();
     }
 }
